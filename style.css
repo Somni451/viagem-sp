@@ -173,3 +173,8 @@ button:hover {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+.avatar-option.selected {
+  background: var(--pink) !important;
+  border-color: var(--purple-dark) !important;
+  box-shadow: 4px 4px 0 var(--purple-dark) !important;
+}
