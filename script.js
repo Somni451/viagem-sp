@@ -8,11 +8,23 @@ const db = window.supabase.createClient(
 );
 
 let selectedAvatar = null;
+let currentParticipant = null;
+
+const CHARACTERS = {
+  jess: 'Jess',
+  leo: 'Leo',
+  nego: 'Nego',
+  beagons: 'Beagons',
+  pat: 'Pat'
+};
 
 const avatarButtons = document.querySelectorAll('.avatar-option');
 
 avatarButtons.forEach(button => {
-  button.addEventListener('click', () => {
+  button.addEventListener('click', async () => {
+
+    const avatarId = button.dataset.avatar;
+    const characterName = CHARACTERS[avatarId];
 
     avatarButtons.forEach(btn => {
       btn.classList.remove('selected');
@@ -20,9 +32,10 @@ avatarButtons.forEach(button => {
 
     button.classList.add('selected');
 
-    selectedAvatar = button.dataset.avatar;
+    selectedAvatar = avatarId;
 
     console.log('Avatar selecionado:', selectedAvatar);
+    console.log('Personagem:', characterName);
   });
 });
 
