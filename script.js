@@ -100,10 +100,9 @@ list.innerHTML = '';
 
 result.data.forEach(function(attraction) {
 const card = document.createElement('div');
-
-```
 card.className = 'attraction';
 
+```
 const title = document.createElement('h3');
 title.textContent = '🍲 ' + attraction.name;
 card.appendChild(title);
