@@ -112,26 +112,61 @@ async function loadAttractions() {
       <p class="info">${attraction.description || ''}</p>
 
       <div class="votes">
-        <button class="yes" data-vote="yes" data-attraction-id="${attraction.id}">👍 Quero ir</button>
-        <button class="maybe" data-vote="maybe" data-attraction-id="${attraction.id}">🤷 Talvez</button>
-        <button class="no" data-vote="no" data-attraction-id="${attraction.id}">👎 Passo</button>
+        <button class="yes" data-vote="yes" data-attraction-id="${attraction.id}">
+          👍 Quero ir
+        </button>
+
+        <button class="maybe" data-vote="maybe" data-attraction-id="${attraction.id}">
+          🤷 Talvez
+        </button>
+
+        <button class="no" data-vote="no" data-attraction-id="${attraction.id}">
+          👎 Passo
+        </button>
       </div>
     `;
 
     list.appendChild(card);
 
     card.querySelectorAll('.votes button').forEach(button => {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', async () => {
 
         const participantId = localStorage.getItem('participant_id');
         const attractionId = button.dataset.attractionId;
         const vote = button.dataset.vote;
+
+        if (!participantId) {
+          console.error('Nenhum personagem selecionado.');
+          return;
+        }
 
         console.log('Voto:', {
           participantId,
           attractionId,
           vote
         });
+
+        const { data: savedVote, error: voteError } = await db
+          .from('votes')
+          .upsert(
+            {
+              participant_id: participantId,
+              attraction_id: attractionId,
+              vote: vote
+            },
+            {
+              onConflict: 'participant_id,attraction_id'
+            }
+          )
+          .select()
+          .single();
+
+        if (voteError) {
+          console.error('Erro ao salvar voto:', voteError);
+          return;
+        }
+
+        console.log('Voto salvo:', savedVote);
       });
     });
   });
