@@ -18,48 +18,45 @@ pat: 'Pat'
 
 const avatarButtons = document.querySelectorAll('.avatar-option');
 
-avatarButtons.forEach(function(button) {
-button.addEventListener('click', async function() {
-if (selectedAvatar !== null) {
-return;
-}
+for (let i = 0; i < avatarButtons.length; i++) {
+avatarButtons[i].addEventListener('click', async function() {
 
 ```
-const avatarId = button.dataset.avatar;
+if (selectedAvatar !== null) {
+  return;
+}
+
+const avatarId = this.dataset.avatar;
 const characterName = CHARACTERS[avatarId];
 
-button.classList.add('selected');
+this.classList.add('selected');
 selectedAvatar = avatarId;
 
-avatarButtons.forEach(function(btn) {
-  btn.disabled = true;
-});
+for (let j = 0; j < avatarButtons.length; j++) {
+  avatarButtons[j].disabled = true;
+}
 
 console.log('Avatar selecionado:', selectedAvatar);
-console.log('Personagem:', characterName);
 
-const result = await db
+const participantResult = await db
   .from('participants')
   .select('*')
   .eq('avatar_url', avatarId)
   .maybeSingle();
 
-if (result.error) {
-  console.error('Erro ao procurar participante:', result.error);
+if (participantResult.error) {
+  console.error('Erro ao procurar participante:', participantResult.error);
   return;
 }
 
-if (result.data) {
-  currentParticipant = result.data;
-
-  console.log('Participante encontrado:', currentParticipant);
-
+if (participantResult.data) {
+  currentParticipant = participantResult.data;
   localStorage.setItem('participant_id', currentParticipant.id);
-
+  console.log('Participante encontrado:', currentParticipant);
   return;
 }
 
-const insertResult = await db
+const newParticipantResult = await db
   .from('participants')
   .insert({
     name: characterName,
@@ -68,41 +65,46 @@ const insertResult = await db
   .select()
   .single();
 
-if (insertResult.error) {
-  console.error('Erro ao criar participante:', insertResult.error);
+if (newParticipantResult.error) {
+  console.error('Erro ao criar participante:', newParticipantResult.error);
   return;
 }
 
-currentParticipant = insertResult.data;
+currentParticipant = newParticipantResult.data;
+localStorage.setItem('participant_id', currentParticipant.id);
 
 console.log('Participante criado:', currentParticipant);
-
-localStorage.setItem('participant_id', currentParticipant.id);
 ```
 
 });
-});
+}
 
 async function loadAttractions() {
-const result = await db
+const attractionResult = await db
 .from('attractions')
 .select('*')
 .order('created_at', { ascending: true });
 
-if (result.error) {
-console.error('Erro ao carregar atrações:', result.error);
+if (attractionResult.error) {
+console.error('Erro ao carregar atrações:', attractionResult.error);
 return;
 }
 
 const list = document.getElementById('attractions-list');
 
-list.innerHTML = '';
+while (list.firstChild) {
+list.removeChild(list.firstChild);
+}
 
-result.data.forEach(function(attraction) {
+const attractions = attractionResult.data;
+
+for (let i = 0; i < attractions.length; i++) {
+const attraction = attractions[i];
+
+```
 const card = document.createElement('div');
 card.className = 'attraction';
 
-```
 const title = document.createElement('h3');
 title.textContent = '🍲 ' + attraction.name;
 card.appendChild(title);
@@ -122,10 +124,12 @@ hours.className = 'info';
 hours.textContent = '🕐 Horário: ' + (attraction.opening_hours || 'A definir');
 card.appendChild(hours);
 
-const description = document.createElement('p');
-description.className = 'info';
-description.textContent = attraction.description || '';
-card.appendChild(description);
+if (attraction.description) {
+  const description = document.createElement('p');
+  description.className = 'info';
+  description.textContent = attraction.description;
+  card.appendChild(description);
+}
 
 const votes = document.createElement('div');
 votes.className = 'votes';
@@ -155,30 +159,28 @@ votes.appendChild(noButton);
 card.appendChild(votes);
 list.appendChild(card);
 
-const voteButtons = card.querySelectorAll('.votes button');
+const buttons = [yesButton, maybeButton, noButton];
 
-voteButtons.forEach(function(button) {
-  button.addEventListener('click', async function() {
+for (let j = 0; j < buttons.length; j++) {
+  buttons[j].addEventListener('click', async function() {
+
     const participantId = localStorage.getItem('participant_id');
-    const attractionId = button.dataset.attractionId;
-    const vote = button.dataset.vote;
 
     if (!participantId) {
       console.error('Nenhum personagem selecionado.');
       return;
     }
 
-    voteButtons.forEach(function(btn) {
-      btn.classList.remove('selected');
-    });
+    for (let k = 0; k < buttons.length; k++) {
+      buttons[k].classList.remove('selected');
+    }
 
-    button.classList.add('selected');
+    this.classList.add('selected');
 
-    console.log('Voto:', {
-      participantId: participantId,
-      attractionId: attractionId,
-      vote: vote
-    });
+    const vote = this.dataset.vote;
+    const attractionId = this.dataset.attractionId;
+
+    console.log('Voto:', participantId, attractionId, vote);
 
     const voteResult = await db
       .from('votes')
@@ -202,12 +204,13 @@ voteButtons.forEach(function(button) {
 
     console.log('Voto salvo:', voteResult.data);
   });
-});
+}
 ```
 
-});
+}
 
-console.log('Atrações carregadas:', result.data);
+console.log('Atrações carregadas:', attractions);
 }
 
 loadAttractions();
+
