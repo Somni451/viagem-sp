@@ -107,9 +107,9 @@ async function loadAttractions() {
       <p class="info">${attraction.description || ''}</p>
 
       <div class="votes">
-        <button class="yes">👍 Quero ir</button>
-        <button class="maybe">🤷 Talvez</button>
-        <button class="no">👎 Passo</button>
+       <button class="yes" data-vote="yes" data-attraction-id="${attraction.id}">👍 Quero ir</button>
+<button class="maybe" data-vote="maybe" data-attraction-id="${attraction.id}">🤷 Talvez</button>
+<button class="no" data-vote="no" data-attraction-id="${attraction.id}">👎 Passo</button>
       </div>
     `;
 
@@ -118,5 +118,19 @@ async function loadAttractions() {
 
   console.log('Atrações carregadas:', data);
 }
+
+document.querySelectorAll('.votes button').forEach(button => {
+  button.addEventListener('click', async () => {
+
+    const participantId = localStorage.getItem('participant_id');
+    const attractionId = button.dataset.attractionId;
+    const vote = button.dataset.vote;
+
+    console.log('Voto:', {
+      participantId,
+      attractionId,
+      vote
+  });
+});
 
 loadAttractions();
