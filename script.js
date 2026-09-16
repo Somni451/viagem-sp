@@ -36,41 +36,46 @@ avatarButtons.forEach(button => {
 
     console.log('Avatar selecionado:', selectedAvatar);
     console.log('Personagem:', characterName);
+
     const { data: existingParticipant, error: findError } = await db
-  .from('participants')
-  .select('*')
-  .eq('avatar_url', avatarId)
-  .maybeSingle();
+      .from('participants')
+      .select('*')
+      .eq('avatar_url', avatarId)
+      .maybeSingle();
 
-if (findError) {
-  console.error('Erro ao procurar participante:', findError);
-  return;
-}
+    if (findError) {
+      console.error('Erro ao procurar participante:', findError);
+      return;
+    }
+
     if (existingParticipant) {
-  currentParticipant = existingParticipant;
+      currentParticipant = existingParticipant;
 
-  console.log('Participante encontrado:', currentParticipant);
-       localStorage.setItem('participant_id', currentParticipant.id);
-  return;
-}
+      console.log('Participante encontrado:', currentParticipant);
 
-const { data: newParticipant, error: insertError } = await db
-  .from('participants')
-  .insert({
-    name: characterName,
-    avatar_url: avatarId
-  })
-  .select()
-  .single();
+      localStorage.setItem('participant_id', currentParticipant.id);
 
-if (insertError) {
-  console.error('Erro ao criar participante:', insertError);
-  return;
-}
+      return;
+    }
 
-currentParticipant = newParticipant;
+    const { data: newParticipant, error: insertError } = await db
+      .from('participants')
+      .insert({
+        name: characterName,
+        avatar_url: avatarId
+      })
+      .select()
+      .single();
 
-console.log('Participante criado:', currentParticipant);
+    if (insertError) {
+      console.error('Erro ao criar participante:', insertError);
+      return;
+    }
+
+    currentParticipant = newParticipant;
+
+    console.log('Participante criado:', currentParticipant);
+
     localStorage.setItem('participant_id', currentParticipant.id);
   });
 });
@@ -107,9 +112,9 @@ async function loadAttractions() {
       <p class="info">${attraction.description || ''}</p>
 
       <div class="votes">
-       <button class="yes" data-vote="yes" data-attraction-id="${attraction.id}">👍 Quero ir</button>
-<button class="maybe" data-vote="maybe" data-attraction-id="${attraction.id}">🤷 Talvez</button>
-<button class="no" data-vote="no" data-attraction-id="${attraction.id}">👎 Passo</button>
+        <button class="yes" data-vote="yes" data-attraction-id="${attraction.id}">👍 Quero ir</button>
+        <button class="maybe" data-vote="maybe" data-attraction-id="${attraction.id}">🤷 Talvez</button>
+        <button class="no" data-vote="no" data-attraction-id="${attraction.id}">👎 Passo</button>
       </div>
     `;
 
@@ -130,6 +135,7 @@ document.querySelectorAll('.votes button').forEach(button => {
       participantId,
       attractionId,
       vote
+    });
   });
 });
 
