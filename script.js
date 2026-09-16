@@ -7,6 +7,62 @@ const db = window.supabase.createClient(
   SUPABASE_KEY
 );
 
+let selectedAvatar = null;
+
+const avatarButtons = document.querySelectorAll('.avatar-option');
+
+avatarButtons.forEach(button => {
+  button.addEventListener('click', () => {
+
+    avatarButtons.forEach(btn => {
+      btn.classList.remove('selected');
+    });
+
+    button.classList.add('selected');
+
+    selectedAvatar = button.dataset.avatar;
+
+    console.log('Avatar selecionado:', selectedAvatar);
+  });
+});
+
+const enterButton = document.getElementById('enter-trip');
+
+enterButton.addEventListener('click', async () => {
+
+  const nameInput = document.getElementById('participant-name');
+  const name = nameInput.value.trim();
+
+  if (!name) {
+    alert('Digite seu nome primeiro! 👀');
+    return;
+  }
+
+  if (!selectedAvatar) {
+    alert('Escolha um avatar primeiro! 🎮');
+    return;
+  }
+
+  const { data, error } = await db
+    .from('participants')
+    .insert({
+      name: name,
+      avatar_url: selectedAvatar
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Erro ao criar participante:', error);
+    alert('Ops! Não consegui criar seu participante.');
+    return;
+  }
+
+  console.log('Participante criado:', data);
+
+  alert(`Bem-vinda(o), ${data.name}! 💜`);
+});
+
 async function loadAttractions() {
   const { data, error } = await db
     .from('attractions')
