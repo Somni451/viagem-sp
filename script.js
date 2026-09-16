@@ -20,8 +20,6 @@ const avatarButtons = document.querySelectorAll('.avatar-option');
 
 for (let i = 0; i < avatarButtons.length; i++) {
 avatarButtons[i].addEventListener('click', async function() {
-
-```
 if (selectedAvatar !== null) {
   return;
 }
@@ -74,8 +72,6 @@ currentParticipant = newParticipantResult.data;
 localStorage.setItem('participant_id', currentParticipant.id);
 
 console.log('Participante criado:', currentParticipant);
-```
-
 });
 }
 
@@ -100,8 +96,6 @@ const attractions = attractionResult.data;
 
 for (let i = 0; i < attractions.length; i++) {
 const attraction = attractions[i];
-
-```
 const card = document.createElement('div');
 card.className = 'attraction';
 
@@ -205,7 +199,6 @@ for (let j = 0; j < buttons.length; j++) {
     console.log('Voto salvo:', voteResult.data);
   });
 }
-```
 
 }
 
