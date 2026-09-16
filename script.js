@@ -50,6 +50,7 @@ if (findError) {
   currentParticipant = existingParticipant;
 
   console.log('Participante encontrado:', currentParticipant);
+       localStorage.setItem('participant_id', currentParticipant.id);
   return;
 }
 
@@ -70,6 +71,7 @@ if (insertError) {
 currentParticipant = newParticipant;
 
 console.log('Participante criado:', currentParticipant);
+    localStorage.setItem('participant_id', currentParticipant.id);
   });
 });
 
