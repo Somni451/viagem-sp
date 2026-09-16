@@ -132,19 +132,19 @@ const yesButton = document.createElement('button');
 yesButton.className = 'yes';
 yesButton.dataset.vote = 'yes';
 yesButton.dataset.attractionId = attraction.id;
-yesButton.textContent = '👍 Quero ir';
+yesButton.textContent = 'Quero ir';
 
 const maybeButton = document.createElement('button');
 maybeButton.className = 'maybe';
 maybeButton.dataset.vote = 'maybe';
 maybeButton.dataset.attractionId = attraction.id;
-maybeButton.textContent = '🤷 Talvez';
+maybeButton.textContent = 'Talvez';
 
 const noButton = document.createElement('button');
 noButton.className = 'no';
 noButton.dataset.vote = 'no';
 noButton.dataset.attractionId = attraction.id;
-noButton.textContent = '👎 Passo';
+noButton.textContent = 'Passo';
 
 votes.appendChild(yesButton);
 votes.appendChild(maybeButton);
