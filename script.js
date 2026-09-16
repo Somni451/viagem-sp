@@ -31,7 +31,6 @@ const avatarId = button.dataset.avatar;
 const characterName = CHARACTERS[avatarId];
 
 button.classList.add('selected');
-
 selectedAvatar = avatarId;
 
 avatarButtons.forEach(btn => {
@@ -54,8 +53,11 @@ if (findError) {
 
 if (existingParticipant) {
   currentParticipant = existingParticipant;
+
   console.log('Participante encontrado:', currentParticipant);
+
   localStorage.setItem('participant_id', currentParticipant.id);
+
   return;
 }
 
