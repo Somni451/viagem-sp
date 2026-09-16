@@ -7,8 +7,9 @@
   --pink: #f08bd6;
   --cream: #fff5df;
   --white: #ffffff;
-  --green: #83d88f;
-  --yellow: #ffd966;
+  --vote-default: #E9D7FA;
+  --vote-selected: #B6D2C6;
+  --vote-border: #220F38;
 }
 
 * {
@@ -131,31 +132,26 @@ h2 {
   margin-top: 20px;
 }
 
-button {
-  border: 3px solid var(--purple-dark);
-  background: var(--cream);
-  padding: 10px 14px;
+.votes button {
+  border: 3px solid var(--vote-border);
+  background: var(--vote-default);
+  color: var(--purple-dark);
+  padding: 10px 18px;
   font-family: 'VT323', monospace;
   font-size: 20px;
   cursor: pointer;
-  box-shadow: 4px 4px 0 var(--purple-dark);
+  box-shadow: 4px 4px 0 var(--vote-border);
 }
 
-button:hover {
+.votes button:hover {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--purple-dark);
+  box-shadow: 2px 2px 0 var(--vote-border);
 }
 
-.yes {
-  background: var(--green);
-}
-
-.maybe {
-  background: var(--yellow);
-}
-
-.no {
-  background: var(--pink);
+.votes button.selected {
+  background: var(--vote-selected);
+  border-color: var(--vote-border);
+  box-shadow: 4px 4px 0 var(--vote-border);
 }
 
 @media (max-width: 600px) {
@@ -192,7 +188,7 @@ button:hover {
     flex-direction: column;
   }
 
-  button {
+  .votes button {
     width: 100%;
   }
 }
