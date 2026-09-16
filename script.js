@@ -18,6 +18,36 @@ async function loadAttractions() {
     return;
   }
 
+  const list = document.getElementById('attractions-list');
+
+  list.innerHTML = '';
+
+  data.forEach(attraction => {
+    const card = document.createElement('div');
+
+    card.className = 'attraction';
+
+    card.innerHTML = `
+      <h3>🍲 ${attraction.name}</h3>
+
+      <p class="info">📍 ${attraction.address}</p>
+
+      <span class="category">${attraction.category}</span>
+
+      <p class="info">🕐 Horário: ${attraction.opening_hours || 'A definir'}</p>
+
+      <p class="info">${attraction.description || ''}</p>
+
+      <div class="votes">
+        <button class="yes">👍 Quero ir</button>
+        <button class="maybe">🤷 Talvez</button>
+        <button class="no">👎 Passo</button>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+
   console.log('Atrações carregadas:', data);
 }
 
