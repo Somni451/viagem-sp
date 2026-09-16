@@ -23,16 +23,22 @@ const avatarButtons = document.querySelectorAll('.avatar-option');
 avatarButtons.forEach(button => {
   button.addEventListener('click', async () => {
 
+    // Se já escolheu um personagem, não permite trocar
+    if (selectedAvatar !== null) {
+      return;
+    }
+
     const avatarId = button.dataset.avatar;
     const characterName = CHARACTERS[avatarId];
-
-    avatarButtons.forEach(btn => {
-      btn.classList.remove('selected');
-    });
 
     button.classList.add('selected');
 
     selectedAvatar = avatarId;
+
+    // Bloqueia todos os personagens depois da escolha
+    avatarButtons.forEach(btn => {
+      btn.disabled = true;
+    });
 
     console.log('Avatar selecionado:', selectedAvatar);
     console.log('Personagem:', characterName);
