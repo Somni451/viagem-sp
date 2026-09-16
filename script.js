@@ -1,7 +1,6 @@
 const SUPABASE_URL = 'https://svlllemeaoglofgkjwqy.supabase.co';
 
 const SUPABASE_KEY = 'sb_publishable_awG6lCJsMGP7n35B2yV20w_h46ATS9L';
-
 const db = window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
@@ -55,11 +54,8 @@ if (findError) {
 
 if (existingParticipant) {
   currentParticipant = existingParticipant;
-
   console.log('Participante encontrado:', currentParticipant);
-
   localStorage.setItem('participant_id', currentParticipant.id);
-
   return;
 }
 
@@ -110,13 +106,9 @@ card.className = 'attraction';
 
 card.innerHTML = `
   <h3>🍲 ${attraction.name}</h3>
-
   <p class="info">📍 ${attraction.address}</p>
-
   <span class="category">${attraction.category}</span>
-
   <p class="info">🕐 Horário: ${attraction.opening_hours || 'A definir'}</p>
-
   <p class="info">${attraction.description || ''}</p>
 
   <div class="votes">
@@ -150,12 +142,10 @@ voteButtons.forEach(button => {
       return;
     }
 
-    // Remove a seleção dos outros botões
     voteButtons.forEach(btn => {
       btn.classList.remove('selected');
     });
 
-    // Marca o botão clicado
     button.classList.add('selected');
 
     console.log('Voto:', {
