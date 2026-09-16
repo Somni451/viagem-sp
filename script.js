@@ -1,5 +1,4 @@
 const SUPABASE_URL = 'https://svlllemeaoglofgkjwqy.supabase.co';
-
 const SUPABASE_KEY = 'sb_publishable_awG6lCJsMGP7n35B2yV20w_h46ATS9L';
 const db = window.supabase.createClient(
 SUPABASE_URL,
@@ -53,11 +52,8 @@ if (findError) {
 
 if (existingParticipant) {
   currentParticipant = existingParticipant;
-
   console.log('Participante encontrado:', currentParticipant);
-
   localStorage.setItem('participant_id', currentParticipant.id);
-
   return;
 }
 
@@ -76,9 +72,7 @@ if (insertError) {
 }
 
 currentParticipant = newParticipant;
-
 console.log('Participante criado:', currentParticipant);
-
 localStorage.setItem('participant_id', currentParticipant.id);
 ```
 
@@ -106,27 +100,16 @@ const card = document.createElement('div');
 ```
 card.className = 'attraction';
 
-card.innerHTML = `
-  <h3>🍲 ${attraction.name}</h3>
-  <p class="info">📍 ${attraction.address}</p>
-  <span class="category">${attraction.category}</span>
-  <p class="info">🕐 Horário: ${attraction.opening_hours || 'A definir'}</p>
-  <p class="info">${attraction.description || ''}</p>
-
-  <div class="votes">
-    <button class="yes" data-vote="yes" data-attraction-id="${attraction.id}">
-      👍 Quero ir
-    </button>
-
-    <button class="maybe" data-vote="maybe" data-attraction-id="${attraction.id}">
-      🤷 Talvez
-    </button>
-
-    <button class="no" data-vote="no" data-attraction-id="${attraction.id}">
-      👎 Passo
-    </button>
-  </div>
-`;
+card.innerHTML = '<h3>🍲 ' + attraction.name + '</h3>' +
+  '<p class="info">📍 ' + attraction.address + '</p>' +
+  '<span class="category">' + attraction.category + '</span>' +
+  '<p class="info">🕐 Horário: ' + (attraction.opening_hours || 'A definir') + '</p>' +
+  '<p class="info">' + (attraction.description || '') + '</p>' +
+  '<div class="votes">' +
+    '<button class="yes" data-vote="yes" data-attraction-id="' + attraction.id + '">👍 Quero ir</button>' +
+    '<button class="maybe" data-vote="maybe" data-attraction-id="' + attraction.id + '">🤷 Talvez</button>' +
+    '<button class="no" data-vote="no" data-attraction-id="' + attraction.id + '">👎 Passo</button>' +
+  '</div>';
 
 list.appendChild(card);
 
@@ -136,54 +119,5 @@ voteButtons.forEach(button => {
   button.addEventListener('click', async () => {
 
     const participantId = localStorage.getItem('participant_id');
-    const attractionId = button.dataset.attractionId;
-    const vote = button.dataset.vote;
-
-    if (!participantId) {
-      console.error('Nenhum personagem selecionado.');
-      return;
-    }
-
-    voteButtons.forEach(btn => {
-      btn.classList.remove('selected');
-    });
-
-    button.classList.add('selected');
-
-    console.log('Voto:', {
-      participantId,
-      attractionId,
-      vote
-    });
-
-    const { data: savedVote, error: voteError } = await db
-      .from('votes')
-      .upsert(
-        {
-          participant_id: participantId,
-          attraction_id: attractionId,
-          vote: vote
-        },
-        {
-          onConflict: 'participant_id,attraction_id'
-        }
-      )
-      .select()
-      .single();
-
-    if (voteError) {
-      console.error('Erro ao salvar voto:', voteError);
-      return;
-    }
-
-    console.log('Voto salvo:', savedVote);
-  });
-});
+    const attractionId = button.dataset
 ```
-
-});
-
-console.log('Atrações carregadas:', data);
-}
-
-loadAttractions();
