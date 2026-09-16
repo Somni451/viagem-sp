@@ -36,6 +36,40 @@ avatarButtons.forEach(button => {
 
     console.log('Avatar selecionado:', selectedAvatar);
     console.log('Personagem:', characterName);
+    const { data: existingParticipant, error: findError } = await db
+  .from('participants')
+  .select('*')
+  .eq('avatar_url', avatarId)
+  .maybeSingle();
+
+if (findError) {
+  console.error('Erro ao procurar participante:', findError);
+  return;
+}
+    if (existingParticipant) {
+  currentParticipant = existingParticipant;
+
+  console.log('Participante encontrado:', currentParticipant);
+  return;
+}
+
+const { data: newParticipant, error: insertError } = await db
+  .from('participants')
+  .insert({
+    name: characterName,
+    avatar_url: avatarId
+  })
+  .select()
+  .single();
+
+if (insertError) {
+  console.error('Erro ao criar participante:', insertError);
+  return;
+}
+
+currentParticipant = newParticipant;
+
+console.log('Participante criado:', currentParticipant);
   });
 });
 
