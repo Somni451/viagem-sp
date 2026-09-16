@@ -119,24 +119,24 @@ async function loadAttractions() {
     `;
 
     list.appendChild(card);
+
+    card.querySelectorAll('.votes button').forEach(button => {
+      button.addEventListener('click', () => {
+
+        const participantId = localStorage.getItem('participant_id');
+        const attractionId = button.dataset.attractionId;
+        const vote = button.dataset.vote;
+
+        console.log('Voto:', {
+          participantId,
+          attractionId,
+          vote
+        });
+      });
+    });
   });
 
   console.log('Atrações carregadas:', data);
 }
-
-document.querySelectorAll('.votes button').forEach(button => {
-  button.addEventListener('click', async () => {
-
-    const participantId = localStorage.getItem('participant_id');
-    const attractionId = button.dataset.attractionId;
-    const vote = button.dataset.vote;
-
-    console.log('Voto:', {
-      participantId,
-      attractionId,
-      vote
-    });
-  });
-});
 
 loadAttractions();
