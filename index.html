@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -54,7 +53,17 @@
 
   <h2>📍 Atrações</h2>
 
-  <div id="attractions-list"></div>
+  <!-- FILTRO DE DIAS -->
+  <div class="days-container">
+    <button class="day-btn active" data-day="all">Todos</button>
+    <button class="day-btn" data-day="25">25 Set</button>
+    <button class="day-btn" data-day="26">26 Set</button>
+    <button class="day-btn" data-day="27">27 Set</button>
+    <button class="day-btn" data-day="28">28 Set</button>
+  </div>
+
+  <!-- CONTAINER DOS CARDS COM A CLASSE GRID -->
+  <div id="attractions-list" class="cards-grid"></div>
 
 </main>
 
@@ -63,4 +72,3 @@
 
 </body>
 </html>
-```
