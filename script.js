@@ -93,25 +93,59 @@ async function loadAttractions() {
     card.setAttribute('data-id', attraction.id); // Importante para travar depois
     card.setAttribute('data-open', attraction.dias || "25,26,27,28");
 
-    // RANKING GLOBAL: Conta quantos "yes" (Quero ir) essa atração tem
+    // ---> CABEÇALHO DO CARD (Flexbox para separar textos e o badge)
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'attraction-header';
+
+    const infoTopDiv = document.createElement('div');
+    infoTopDiv.className = 'attraction-info-top';
+
+    // 1. TÍTULO
+    const title = document.createElement('h3');
+    title.textContent = '🍲 ' + attraction.name;
+    infoTopDiv.appendChild(title);
+
+    // 2. MÚLTIPLAS CATEGORIAS
+    const catContainer = document.createElement('div');
+    catContainer.className = 'categories-container';
+    
+    // Pega a string do banco e separa por "/" ou ","
+    const categoriesString = attraction.category || 'Atração';
+    const categoriesArray = categoriesString.split(/[\/,]/); 
+    
+    categoriesArray.forEach(cat => {
+      const catSpan = document.createElement('span');
+      catSpan.className = 'category';
+      catSpan.textContent = cat.trim(); // .trim() remove os espaços em branco extras
+      catContainer.appendChild(catSpan);
+    });
+    
+    infoTopDiv.appendChild(catContainer);
+    headerDiv.appendChild(infoTopDiv);
+
+    // 3. BADGE 8-BIT DO RANKING
     const yesCount = allVotes.filter(v => v.attraction_id === attraction.id && v.vote === 'yes').length;
     
     const rankingBadge = document.createElement('div');
     rankingBadge.className = 'ranking-badge';
-    rankingBadge.innerHTML = `🔥 Querem ir: <strong>${yesCount}</strong>`;
-    card.appendChild(rankingBadge);
+    
+    const numberSpan = document.createElement('span');
+    numberSpan.className = 'number';
+    numberSpan.textContent = yesCount.toString().padStart(2, '0');
+    
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'label';
+    labelSpan.textContent = 'querem ir';
+    
+    rankingBadge.appendChild(numberSpan);
+    rankingBadge.appendChild(labelSpan);
+    
+    headerDiv.appendChild(rankingBadge);
+    
+    // Adiciona o cabeçalho montado dentro do card principal
+    card.appendChild(headerDiv);
 
-    // Título e Categoria
-    const title = document.createElement('h3');
-    title.textContent = '🍲 ' + attraction.name;
-    card.appendChild(title);
-
-    const category = document.createElement('span');
-    category.className = 'category';
-    category.textContent = attraction.category;
-    card.appendChild(category);
-
-    // Área Escondida (Expandível)
+    // ---> ÁREA ESCONDIDA (Expandível)
     const extraInfo = document.createElement('div');
     extraInfo.className = 'extra-info';
 
