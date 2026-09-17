@@ -222,6 +222,30 @@ h2 {
 /* =========================================
    RESPONSIVO (MOBILE)
    ========================================= */
+/* =========================================
+   RANKING GLOBAl E ESTADO VOTADO
+   ========================================= */
+/* A barrinha que mostra os votos da galera no card */
+.ranking-badge {
+  display: flex;
+  gap: 12px;
+  background: var(--purple-light);
+  color: var(--purple-dark);
+  padding: 6px 12px;
+  border: 2px solid var(--purple-dark);
+  font-size: 16px;
+  margin-bottom: 12px;
+  width: fit-content;
+}
+
+/* O estado cinza e travado para quando o usuário já votou */
+.attraction.voted-disabled {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  pointer-events: none; /* Impede novos cliques */
+  border-color: #555;
+  box-shadow: 4px 4px 0 #555;
+}
 @media (max-width: 600px) {
   h1 {
     font-size: 20px;
